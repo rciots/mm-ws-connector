@@ -5,7 +5,7 @@ const clientKey = 'certs/server.key';
 const clientCert = 'certs/server.crt';
 const { Server } = require("socket.io");
 const port = process.env.PORT || 8080;
-const wsmanager = process.env.WS_MANAGER || "ws.rciots.com";
+const wsmanager = process.env.WS_MANAGER || "socket.rciots.com";
 const socketcli = require("socket.io-client");
 const ioclient = new socketcli.connect("https://" + wsmanager , {
     ca: fs.readFileSync('certs/serverCA.crt', 'utf-8'),
@@ -17,6 +17,10 @@ const ioclient = new socketcli.connect("https://" + wsmanager , {
   });
 ioclient.on('connect_error', (error) => {
     console.log("connect_error: " + error);
+    console.log(error.description);
+
+    // some additional context, for example the XMLHttpRequest object
+    console.log(error.context);
 });
 ioclient.on('error', (error) => {
     console.log("error: " + error);
@@ -36,6 +40,11 @@ ioclient.on("movement", (movement) => {
     }
 });
 
+ioclient.on("led", (data) => {
+    if (socketArduino != "") {
+        socketArduino.emit("led", data);
+    }
+});
 
 const io = new Server(port, { /* options */ });
 
@@ -51,6 +60,7 @@ io.on('connection', (socket) => {
         });
         socketCam.on("video", (data) => {
             ioclient.emit("video", data);
+            console.log("video: " + data.length);
         }
         );
     } else if (socket.handshake.headers.origin == "arduino") {
