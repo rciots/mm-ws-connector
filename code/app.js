@@ -41,6 +41,7 @@ ioclient.on("movement", (movement) => {
 });
 
 ioclient.on("led", (data) => {
+    console.log("led: " + data);
     if (socketArduino != "") {
         socketArduino.emit("led", data);
     }
