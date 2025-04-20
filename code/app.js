@@ -31,7 +31,7 @@ ioclient.on("connect", () => {
 });
 
 
-let socketCam, socketMKS, socketArduino;
+let socketCam, socketMKS, socketArduino = "";
 
 ioclient.on("movement", (movement) => {
     console.log("movement: " + movement);
@@ -63,14 +63,14 @@ io.on('connection', (socket) => {
             console.log("video: " + data.length);
         }
         );
-    } else if (socket.handshake.headers.origin == "arduino") {
+    } else if (socket.handshake.headers.origin == "controller-arduino") {
         socketArduino = socket;
         console.log('arduino connected');
         socketArduino.on('disconnect', () => {
             socketArduino = "";
             console.log('arduino disconnected');
         });
-    } else if (socket.handshake.headers.origin == "mks") {
+    } else if (socket.handshake.headers.origin == "controller-steppers") {
         socketMKS = socket;
         console.log('mks connected');
         socketMKS.on('disconnect', () => {
