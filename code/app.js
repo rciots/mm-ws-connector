@@ -60,7 +60,6 @@ io.on('connection', (socket) => {
         });
         socketCam.on("video", (data) => {
             ioclient.emit("video", data);
-            console.log("video: " + data.length);
         }
         );
     } else if (socket.handshake.headers.origin == "controller-arduino") {
