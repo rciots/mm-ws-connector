@@ -8,9 +8,9 @@ const port = process.env.PORT || 8080;
 const wsmanager = process.env.WS_MANAGER || "socket.rciots.com";
 const socketcli = require("socket.io-client");
 const ioclient = new socketcli.connect("https://" + wsmanager , {
-    ca: fs.readFileSync('certs/serverCA.crt', 'utf-8'),
-    key: fs.readFileSync('certs/client.key', 'utf-8'),
-    cert: fs.readFileSync('certs/client.crt', 'utf-8'),
+    ca: fs.readFileSync(serverCACert, 'utf-8'),
+    key: fs.readFileSync(clientKey, 'utf-8'),
+    cert: fs.readFileSync(clientCert, 'utf-8'),
     rejectUnauthorized: true,
     reconnection: true,
     reconnectionDelay: 500
@@ -66,6 +66,12 @@ io.on('connection', (socket) => {
     } else if (socket.handshake.headers.origin == "controller-arduino") {
         socketArduino = socket;
         console.log('arduino connected');
+        socketArduino.on('selectedColors', (data) => {
+            ioclient.emit('selectedColors', data);
+        });
+        socketArduino.on('winner', (data) => {
+            ioclient.emit('winner', data);
+        });
         socketArduino.on('disconnect', () => {
             socketArduino = "";
             console.log('arduino disconnected');
