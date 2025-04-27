@@ -47,6 +47,16 @@ ioclient.on("led", (data) => {
     }
 });
 
+ioclient.on("phase", (data) => {
+    console.log("phase: " + data);
+    if (socketMKS != "") {
+        socketMKS.emit("phase", data);
+    }
+    if (socketArduino != "") {
+        socketArduino.emit("phase", data);
+    }
+});
+
 ioclient.on("endgame", (data) => {
     console.log("endgame: " + data);
     if (socketMKS != "") {
