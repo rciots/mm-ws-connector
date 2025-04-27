@@ -47,6 +47,13 @@ ioclient.on("led", (data) => {
     }
 });
 
+ioclient.on("endgame", (data) => {
+    console.log("endgame: " + data);
+    if (socketMKS != "") {
+        socketMKS.emit("endgame", data);
+    }
+});
+
 const io = new Server(port, { /* options */ });
 
 
