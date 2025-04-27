@@ -1,8 +1,8 @@
 
 const fs = require('fs');
-const serverCACert = 'certs/clientCA.crt';
-const clientKey = 'certs/server.key';
-const clientCert = 'certs/server.crt';
+const serverCACert = 'certs/serverCA.crt';
+const clientKey = 'certs/client.key';
+const clientCert = 'certs/client.crt';
 const { Server } = require("socket.io");
 const port = process.env.PORT || 8080;
 const wsmanager = process.env.WS_MANAGER || "socket.rciots.com";
